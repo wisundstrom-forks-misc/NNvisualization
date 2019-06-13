@@ -65,8 +65,10 @@ def deg2num(lat_deg, lon_deg):
     xtile =(lon_deg + 180.0) / 360.0
     ytile =(1.0 - math.log(math.tan(lat_rad) + (1 / math.cos(lat_rad))) / math.pi) / 2.0
     return [xtile, ytile]
-            
-    
+
+parsed_trips = parse_trips(trips)
+cleaned_trips = float_values(parsed_trips)
+
 #40.702030, -74.019704
 #40.807611, -73.929674
 xminll=40.699984
