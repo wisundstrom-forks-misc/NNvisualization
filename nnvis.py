@@ -6,7 +6,6 @@ import statistics
 import math
 
 
-
 def float_values(trips):
     for trip in trips:
         for key, value in trip.items():
@@ -61,13 +60,20 @@ def zvalue(x,y):
     z=mean_distance(nearest_7_neighbors)
     return z
 
+def deg2num(lat_deg, lon_deg):
+    lat_rad = math.radians(lat_deg)
+    xtile =(lon_deg + 180.0) / 360.0
+    ytile =(1.0 - math.log(math.tan(lat_rad) + (1 / math.cos(lat_rad))) / math.pi) / 2.0
+    return [xtile, ytile]
+            
     
 #40.702030, -74.019704
 #40.807611, -73.929674
-xmin=40.699984
-xmax=40.807611
-ymin=-74.019704
-ymax=-73.953073
+xminll=40.699984
+xmaxll=40.807611
+yminll=-74.019704
+ymaxll=-73.953073
+
 numpoints=10 #this is the number of x points and y points, so total sample points is this squared
 xlist=list(np.linspace(xmin,xmax,numpoints))
 ylist=list(np.linspace(ymin,ymax,numpoints))
@@ -75,5 +81,11 @@ ylist=list(np.linspace(ymin,ymax,numpoints))
 xx,yy = np.meshgrid(xlist, ylist)
 vectorz=np.vectorize(zvalue)
 zgrid=vectorz(xx,yy)
-data=[go.Contour(x=xlist,y=ylist,z=zgrid)]
+
+mmin=deg2num(xminll,yminll)
+mmax=deg2num(xmaxll,ymaxll)
+
+plotx=list(np.linspace(mmin[0],mmax[0],numpoints))
+ploty=list(np.linspace(mmin[1],mmax[1],numpoints))
+data=[go.Contour(x=plotx,y=ploty,z=zgrid)]
 plotly.offline.iplot(data)
